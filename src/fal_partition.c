@@ -41,7 +41,11 @@ struct part_flash_info
     #define SECTION(x)                 @ x
     #define USED                       __root
 #elif defined (__GNUC__)               /* GNU GCC Compiler */
-    #define SECTION(x)                 __attribute__((section(x)))
+    #if defined(__APPLE__) && defined(__MACH__)
+        #define SECTION(x)             __attribute__((section("__DATA," x)))
+    #else
+        #define SECTION(x)             __attribute__((section(x)))
+    #endif
     #define USED                       __attribute__((used))
 #else
     #error not supported tool chain
